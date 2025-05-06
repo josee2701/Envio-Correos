@@ -7,17 +7,25 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = os.getenv('DEBUG', '0') == '1'
+DEBUG = '0'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Lee la clave secreta desde el entorno
-SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key-if-not-set')
+SECRET_KEY = 'default-secret-key-if-not-set'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = ['backend-yw41.onrender.com', 'localhost', '127.0.0.1']
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Agrega la URL de tu aplicación React en desarrollo
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "https://josee2701.github.io",
+    "https://jose-campos.netlify.app"
+]
 
 # Application definition
 
@@ -28,14 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'contact',  # Aquí faltaba la coma
     'rest_framework',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Este middleware debe estar antes de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -43,6 +51,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/minute',
+        'user': '1000/minute'
+    }
+}
 
 ROOT_URLCONF = 'config.urls'
 
@@ -67,45 +86,35 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('SQLITE_ENGINE'),
-            'NAME': os.path.join(BASE_DIR, os.getenv('SQLITE_NAME')),
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('POSTGRES_ENGINE'),
-            'NAME': os.getenv('POSTGRES_NAME'),
-            'USER': os.getenv('POSTGRES_USER'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-            'HOST': os.getenv('POSTGRES_HOST'),
-            'PORT': os.getenv('POSTGRES_PORT'),
-        }
-    }
+}
+
+# URL pública donde servirás estáticos
+STATIC_URL = '/static/'
+
+# Carpeta destino donde collectstatic volcará todos los archivos
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# (Opcional) Si tienes carpetas de estáticos propias:
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # tu carpeta de estáticos de proyecto
+]
 
 # Información para correo:
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'j.camposs2701@gmail.com'
+EMAIL_HOST_PASSWORD = 'ywzo hrqa hpuo wsok'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Agrega la URL de tu aplicación React en desarrollo
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "https://josee2701.github.io",
-    "https://backend-yw41.onrender.com",  # Asegúrate de incluir el protocolo
-    "https://jose-campos.netlify.app"
-    
-    # Otras URL permitidas pueden ir aquí
-]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -137,37 +146,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-# STATICFILES_DIRS = [
-#     # os.path.join(BASE_DIR, "static"),
-#     os.path.join(APPS_DIR, "static"),
-#     os.path.join(APPS_DIR, "build", "static"),
-# ]
-# MEDIA_ROOT = os.path.join(APPS_DIR, "media")
-# MEDIA_URL = "media/"
-# STATIC_URL = "static/"
-# # Archivos Static para producción
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
-# AZURE_BLOB_AVAIL = all([AZURE_ACCOUNT_NAME])
-# if AZURE_BLOB_AVAIL:
-#     AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
-#     AZURE_LOCATION = ""
-#     DEFAULT_FILE_STORAGE = "config.azureblob.AzureMediaStorage"
-#     STATICFILES_STORAGE = "config.azureblob.AzureStaticStorage"
-#     STATIC_LOCATION = "static"
-#     MEDIA_LOCATION = "media"
-#     STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-#     STATIC_ROOT = STATIC_URL
-#     MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
-#     MEDIA_ROOT = MEDIA_URL
-#     AZURE_OVERWRITE_FILES = True
-# STATICFILES_DIRS = [
-#     os.path.join(APPS_DIR, "static"),
-#     os.path.join(APPS_DIR, "media"),
-# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

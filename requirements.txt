@@ -1,14 +1,13 @@
 # requirements.txt
+#Librerias necesarias para el proyecto django
 django
 djangorestframework
-python-dotenv
-django-cors-headers
-gunicorn
 
-#base de datos
+# Librerias necesarias para el proyecto con fastapi
+fastapi[standard]
 
-psycopg2-binary
+# Librerias necesarias para el proyecto con fastapi y django
+whitenoise
 
-#alamcenamiento:
-
-django-cloudinary-storage
+# Librerria para fastapi para limitar la cantidad de peticiones
+slowapi

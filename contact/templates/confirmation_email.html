@@ -5,47 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmación de recepción de mensaje</title>
     <style>
+        /* contenedor de la sección de firma */
         .footer {
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #cccccc;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            margin-top: 20px;              /* espacio arriba */
+            padding-top: 10px;             /* relleno arriba */
+            border-top: 1px solid #cccccc; /* línea divisoria */
+            /* quitamos flex para que todo quede en una sola columna */
         }
-        
+        /* bloque de información de contacto */
         .footer .info {
-            flex: 2;
-            text-align: left;
+            text-align: left; /* alineación a la izquierda */
         }
+        .info p {
+            padding-left: 10px;        /* espacio interno antes de la línea */
+            border-left: 1px solid #cccccc;  /* línea vertical */             /* eliminar margen por defecto */
+        }
+        /* fila de iconos sociales */
         .social-icons {
-            margin: 10px 0;
+            display: flex;         /* colocarlos en línea */
+            gap: 10px;             /* separación uniforme */
+            margin: 10px 0 0 0;    /* un poco de espacio sobre ellos */
         }
         .social-icons img {
-            width: 30px;
+            width: 30px;           /* tamaño fijo */
             height: 30px;
-            margin: 0 10px;
+            display: block;
         }
     </style>
 </head>
 <body>
     <h1>Confirmación de recepción de mensaje</h1>
-    <p>He recibido tu mensaje y me pondre en contacto contigo pronto. <br>
-        Gracias
+    <p> 
+        Hola, {{ name }} {{ apellido }}.<br>
+        Gracias por ponerte en contacto conmigo. He recibido tu mensaje y me pondré en contacto contigo pronto.<br>
+        ¡Gracias!
     </p>
+
     <footer class="footer">
-        <div class="logo">
-            <img src="https://josee2701.github.io/CV/logo192.png" alt="Logo" style="width: 100px; height: 100px;">
-        </div>
         <div class="info">
-            <p>José Fernando Campos Sánchez<br>
-            Desarrollador Python <br>
-            +57 3123268867</p>
+            <p>
+                José Fernando Campos Sánchez<br>
+                Ingeniero de Sistemas<br>
+                +57 3123268867
+            </p>
             <div class="social-icons">
-                <a href="https://www.linkedin.com/in/josee-py/"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn"></a>
-                <a href="https://www.instagram.com/joseee_2701/"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"></a>
-                <a href="https://github.com/josee2701"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/600px-Octicons-mark-github.svg.png?20180806170715" alt="GitHub"></a>
-                <a href="https://josee2701.github.io/CV/"><img src="https://josee2701.github.io/CV/logo192.png" alt="Portafolio" style='max-width: 150px;'></a>
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/josee-py/" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
+                         alt="LinkedIn">
+                </a>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/joseee_2701/" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+                         alt="Instagram">
+                </a>
+                <!-- GitHub -->
+                <a href="https://github.com/josee2701" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/600px-Octicons-mark-github.svg.png?20180806170715"
+                         alt="GitHub">
+                </a>
+                <!-- Portafolio -->
+                <a href="https://jose-campos.netlify.app/" target="_blank" rel="noopener">
+                    <img src="https://josee2701.github.io/CV/logo192.png"
+                         alt="Portafolio"
+                         style="max-width: 150px;">  <!-- se puede ajustar el tamaño específico -->
+                </a>
             </div>
         </div>
     </footer>

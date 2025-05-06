@@ -12,3 +12,8 @@ __pycache__/
 #variable de entorno:
 .env
 
+# Visual Studio Code settings
+.vscode
+
+#Static analysis
+staticfiles/
