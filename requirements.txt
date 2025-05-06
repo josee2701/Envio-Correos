@@ -8,3 +8,6 @@ fastapi[standard]
 
 # Librerias necesarias para el proyecto con fastapi y django
 whitenoise
+
+# Librerria para fastapi para limitar la cantidad de peticiones
+slowapi
