@@ -6,13 +6,13 @@ https://docs.djangoproject.com/en/4.0/ref/urls/
 
 from django.urls import path
 
-from .views import ContactView
+from .views import ContactAPIView
 
 # Creación de un patrón de URL para las vistas de creación de la empresa.
 app_name = "contact"
 
 urlpatterns = [
     # Creación de un patrón de URL para la vista Empresas.
-    path("from_contact/", ContactView.as_view(), name="contact"),
+    path("email-django/", ContactAPIView.as_view(), name="contact"),
 
 ]   
