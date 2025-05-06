@@ -1,3 +1,6 @@
+import asyncio
+
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
@@ -17,7 +20,7 @@ class ContactAPIView(APIView):
 
     permission_classes = [AllowAny]  # Cualquiera puede usar esta vista
 
-    def post(self, request, *args, **kwargs):
+    async def post(self, request, *args, **kwargs):
         """
         Método que se ejecuta cuando alguien hace POST.
         1) Valida datos.
@@ -35,28 +38,25 @@ class ContactAPIView(APIView):
         # 3) Si son válidos, los guardamos en "data"
         data = serializer.validated_data
 
-        try:
-            # 4) Enviamos primer correo al admin
-            self.info_admin(
+        # 2) Lanzar en background el correo al admin
+        asyncio.create_task(
+            sync_to_async(self.info_admin)(
                 data['name'],
                 data['apellido'],
                 data['email'],
                 data['phone'],
                 data['message'],
             )
-            # 5) Enviamos segundo correo de confirmación al remitente
-            self.info_remitente(
+        )
+        # 3) Lanzar en background el correo al remitente
+        asyncio.create_task(
+            sync_to_async(self.info_remitente)(
                 data['name'],
                 data['apellido'],
                 data['email'],
             )
-        except Exception as e:
-            # 6) Si algo falla al enviar cualquiera de los correos, devolvemos error 500
-            return Response(
-                {'error': f'Error al enviar correo: {e}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
+        )
+     
         # 7) Si todo fue bien, devolvemos mensaje de éxito con código 201
         return Response(
             {'message': 'Correo(s) enviado(s) con éxito'},
