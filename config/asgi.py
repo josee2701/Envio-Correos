@@ -5,6 +5,7 @@ from pathlib import Path
 
 from django.core.asgi import get_asgi_application
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
@@ -22,7 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 django_asgi_app = get_asgi_application()
 
 # 3) FastAPI principal
-app = FastAPI(title="API de alto rendimiento")
+app = FastAPI()
+
+# Orígenes que permites
+origins = [
+    "https://josee2701.github.io",
+    "https://jose-campos.netlify.app"
+]
 
 # ————————————————————————————
 # REDIRECCIONES
@@ -42,6 +49,16 @@ async def redirect_web():
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
+
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          
+    allow_credentials=True,          
+    allow_methods=["*"],             
+    allow_headers=["*"],              
+)
+
 
 # 6) Montaje de estáticos y aplicación Django bajo /web
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "staticfiles")), name="static")

@@ -24,9 +24,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "https://josee2701.github.io",
-    "https://backend-yw41.onrender.com",  # Asegúrate de incluir el protocolo
     "https://jose-campos.netlify.app"
-    
 ]
 
 # Application definition
