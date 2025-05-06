@@ -15,17 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import include, path
-
-from contact import views
-
-
-def home(request):
-    return HttpResponse("¡Bienvenido al sitio de Django!")
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path('', home, name='home'),
     path('admin/', admin.site.urls),
     path("api/", include("contact.urls")),  # Ajuste de 'contact.url' a 'contact.urls'
     path('api-auth/', include('rest_framework.urls'))
